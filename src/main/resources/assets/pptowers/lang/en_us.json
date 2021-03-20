@@ -1,0 +1,11 @@
+{
+  "itemGroup.pptowers.general": "Pew Pew Towers",
+  "item.pptowers.arrow_tower_item": "Arrow Tower",
+  "item.pptowers.fireball_tower_item": "Fireball Tower",
+  "item.pptowers.lightning_tower_item": "Lightning Tower",
+  "item.pptowers.chaining_tower_item": "Chaining Tower",
+  "block.pptowers.arrow_tower_block": "Arrow Tower",
+  "block.pptowers.fireball_tower_block": "Fireball Tower",
+  "block.pptowers.lightning_tower_block": "Lightning Tower",
+  "block.pptowers.chaining_tower_block": "Chaining Tower"
+}
