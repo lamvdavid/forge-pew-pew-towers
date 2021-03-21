@@ -1,10 +1,14 @@
 package com.lamvdavid.pptowers;
 
 import com.lamvdavid.pptowers.registry.ModBlocks;
-import com.lamvdavid.pptowers.registry.ModEntities;
 import com.lamvdavid.pptowers.registry.ModItems;
+import com.lamvdavid.pptowers.registry.ModTileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,6 +33,14 @@ public class PPTowers
     private static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "pptowers";
 
+    public static final ItemGroup PPTOWERS_ITEM_GROUP = new ItemGroup("pptowers") {
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public ItemStack makeIcon() {
+            return new ItemStack(ModBlocks.ARROW_TOWER_BLOCK.get());
+        }
+    };
+
     public PPTowers() {
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -45,7 +57,7 @@ public class PPTowers
         //Register Items
         ModItems.init();
         ModBlocks.init();
-        ModEntities.init();
+        ModTileEntities.init();
     }
 
     private void setup(final FMLCommonSetupEvent event)
