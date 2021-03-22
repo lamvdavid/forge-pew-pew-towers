@@ -2,6 +2,9 @@ package com.lamvdavid.pptowers.registry;
 
 import com.lamvdavid.pptowers.PPTowers;
 import com.lamvdavid.pptowers.entities.ArrowTowerEntity;
+import com.lamvdavid.pptowers.entities.ChainingTowerEntity;
+import com.lamvdavid.pptowers.entities.FireballTowerEntity;
+import com.lamvdavid.pptowers.entities.LightningTowerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -16,7 +19,7 @@ public class ModTileEntities {
     }
 
     public static final RegistryObject<TileEntityType<?>> ARROW_TOWER_ENTITY = TILE_ENTITY_TYPES.register("arrow_tower_entity", () -> TileEntityType.Builder.of(ArrowTowerEntity::new, ModBlocks.ARROW_TOWER_BLOCK.get()).build(null));
-    public static final RegistryObject<TileEntityType<?>> CHAINING_TOWER_ENTITY = TILE_ENTITY_TYPES.register("chaining_tower_entity", () -> TileEntityType.Builder.of(ArrowTowerEntity::new, ModBlocks.CHAINING_TOWER_BLOCK.get()).build(null));
-    public static final RegistryObject<TileEntityType<?>> FIREBALL_TOWER_ENTITY = TILE_ENTITY_TYPES.register("fireball_tower_entity", () -> TileEntityType.Builder.of(ArrowTowerEntity::new, ModBlocks.FIREBALL_TOWER_BLOCK.get()).build(null));
-    public static final RegistryObject<TileEntityType<?>> LIGHTNING_TOWER_ENTITY = TILE_ENTITY_TYPES.register("lightning_tower_entity", () -> TileEntityType.Builder.of(ArrowTowerEntity::new, ModBlocks.LIGHTNING_TOWER_BLOCK.get()).build(null));
+    public static final RegistryObject<TileEntityType<?>> CHAINING_TOWER_ENTITY = TILE_ENTITY_TYPES.register("chaining_tower_entity", () -> TileEntityType.Builder.of(ChainingTowerEntity::new, ModBlocks.CHAINING_TOWER_BLOCK.get()).build(null));
+    public static final RegistryObject<TileEntityType<?>> FIREBALL_TOWER_ENTITY = TILE_ENTITY_TYPES.register("fireball_tower_entity", () -> TileEntityType.Builder.of(FireballTowerEntity::new, ModBlocks.FIREBALL_TOWER_BLOCK.get()).build(null));
+    public static final RegistryObject<TileEntityType<?>> LIGHTNING_TOWER_ENTITY = TILE_ENTITY_TYPES.register("lightning_tower_entity", () -> TileEntityType.Builder.of(LightningTowerEntity::new, ModBlocks.LIGHTNING_TOWER_BLOCK.get()).build(null));
 }

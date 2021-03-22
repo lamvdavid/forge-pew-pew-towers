@@ -20,6 +20,5 @@ public class ChainingTowerEntity extends TrajectoryTowerEntity {
     @Override
     protected ProjectileEntity createProjectile(World world, Position position) {
         return new ChainingProjectileEntity(world, position.x(), position.y(), position.z(), NUM_OF_CHAINS);
-
     }
 }
