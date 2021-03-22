@@ -1,11 +1,12 @@
 package com.lamvdavid.pptowers.entities;
 
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ChainingProjectileEntity extends ArrowEntity {
         super.onHitEntity(entityHitResult);
         range = new AxisAlignedBB(this.position().x() - X_RANGE, this.position().y() - Y_RANGE, this.position().z() - Z_RANGE, this.position().x() + X_RANGE, this.position().y() + Y_RANGE, this.position().z() + Z_RANGE);
         Entity sourceEntity = entityHitResult.getEntity();
-        MonsterEntity target = getClosestMonsterEntity(sourceEntity);
+        MobEntity target = getClosestMonsterEntity(sourceEntity);
         if(target != null && numOfChains > 0) {
 
             ChainingProjectileEntity chainedArrow = new ChainingProjectileEntity(level, sourceEntity.getX() + targetX, sourceEntity.getEyeY() + targetY, sourceEntity.getZ() + targetZ, numOfChains - 1);
@@ -43,7 +44,7 @@ public class ChainingProjectileEntity extends ArrowEntity {
             double y = target.getY(0.33333333D) - chainedArrow.getY();
             double z = target.getZ() - chainedArrow.getZ();
             double d = MathHelper.sqrt(x * x + z * z);
-            chainedArrow.shoot(x, y + d * 0.20000000298023224D, z, 1.6F, 0);
+            chainedArrow.shoot(x, y + d * 0.1D, z, 1.6F, 0);
             level.addFreshEntity(chainedArrow);
         }
 
@@ -87,26 +88,28 @@ public class ChainingProjectileEntity extends ArrowEntity {
     }
 
     //Returns list of HostileEntities in range
-    public List<MonsterEntity> getHostileEntities() {
-        return this.level.getEntitiesOfClass(MonsterEntity.class,range,null);
+    public List<MobEntity> getHostileEntities() {
+        List<MobEntity> hostiles = this.level.getEntitiesOfClass(MobEntity.class, range, null);
+        hostiles.removeIf(e -> e instanceof AgeableEntity || e instanceof GolemEntity);
+        return hostiles;
     }
 
     //Gets the closest hostile mob in sight that isn't the source entity from the position from the source entity
-    public MonsterEntity getClosestMonsterEntity(Entity sourceEntity) {
-        List<MonsterEntity> hostileEntities = getHostileEntities();
+    public MobEntity getClosestMonsterEntity(Entity sourceEntity) {
+        List<MobEntity> hostileEntities = getHostileEntities();
         hostileEntities.remove(sourceEntity);
         hostileEntities = hostileEntities.stream().filter(e -> e.hurtTime == 0).collect(Collectors.toList());
 
-        MonsterEntity target = null;
+        MobEntity target = null;
         double targetDistance = 10000.0;
         double testDistance;
         double[] offset;
 
-        for(MonsterEntity e : hostileEntities) {
+        for(MobEntity e : hostileEntities) {
             testDistance = e.distanceToSqr(sourceEntity.getX(), sourceEntity.getY(), sourceEntity.getZ());
             if(testDistance < targetDistance) {
                 offset = getTargetDirection(sourceEntity, e);
-                if(e.canSee(sourceEntity)) {
+                if(checkSightLine(e, offset[0], offset[1], offset[2])) {
                     setTargetDirection(offset[0], offset[1], offset[2]);
                     target = e;
                     targetDistance = testDistance;
@@ -115,5 +118,13 @@ public class ChainingProjectileEntity extends ArrowEntity {
         }
 
         return target;
+    }
+
+    //Checks if the tower block can see the mob
+    public boolean checkSightLine(Entity entity, double x, double y, double z) {
+        Vector3d vec3d = new Vector3d(this.getX() + x, this.getY() + y, this.getZ() + z);
+        Vector3d vec3d2 = new Vector3d(entity.getX(), entity.getEyeY(), entity.getZ());
+        RayTraceResult.Type test = this.level.clip(new RayTraceContext(vec3d2, vec3d, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity)).getType();
+        return test == RayTraceResult.Type.MISS;
     }
 }

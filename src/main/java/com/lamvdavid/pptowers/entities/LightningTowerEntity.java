@@ -1,8 +1,8 @@
 package com.lamvdavid.pptowers.entities;
 
 import com.lamvdavid.pptowers.registry.ModTileEntities;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class LightningTowerEntity extends InstantTowerEntity {
     public static final int FIRE_RATE = 20;
     public static final int NUM_OF_ATTACKS = 5;
 
-    public List<Entity> hostiles;
+    public List<MobEntity> hostiles;
 
     public LightningTowerEntity() {
         super(ModTileEntities.LIGHTNING_TOWER_ENTITY.get(), X_RANGE, Y_RANGE, Z_RANGE, FIRE_RATE);

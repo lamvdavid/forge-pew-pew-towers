@@ -18,7 +18,7 @@ public abstract class TrajectoryTowerEntity extends ProjectileTowerEntity{
         double y = target.getY(0.33333333D) - proj.getY();
         double z = target.getZ() - proj.getZ();
         double d = MathHelper.sqrt(x * x + z * z);
-        proj.shoot(x, y + d * 0.20000000298023224D, z, 1.6F, 0);
+        proj.shoot(x, y + d * 0.1D, z, 1.6F, 0);
         level.addFreshEntity(proj);
     }
 }

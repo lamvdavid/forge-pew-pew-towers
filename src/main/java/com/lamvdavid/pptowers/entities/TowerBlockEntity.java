@@ -1,7 +1,9 @@
 package com.lamvdavid.pptowers.entities;
 
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -15,7 +17,7 @@ import java.util.List;
 public abstract class TowerBlockEntity extends TileEntity implements ITickableTileEntity {
     public AxisAlignedBB range;
     protected boolean isRangeSet = false;
-    public MonsterEntity target = null;
+    public MobEntity target = null;
     public double xRange;
     public double yRange;
     public double zRange;
@@ -107,19 +109,21 @@ public abstract class TowerBlockEntity extends TileEntity implements ITickableTi
     }
 
     //Retrieves all hostiles entities within range of the block
-    public List<Entity> getHostileEntities() {
+    public List<MobEntity> getHostileEntities() {
         if(!isRangeSet) {
             this.range = new AxisAlignedBB(this.worldPosition.getX() - xRange, this.worldPosition.getY() - yRange, this.worldPosition.getZ() - zRange, this.worldPosition.getX() + xRange, this.worldPosition.getY() + yRange, this.worldPosition.getZ() + zRange);
             isRangeSet = true;
         }
-        return this.getLevel().getEntitiesOfClass(MonsterEntity.class,range,null);
+        List<MobEntity> hostiles = this.getLevel().getEntitiesOfClass(MobEntity.class, range, null);
+        hostiles.removeIf(e -> e instanceof AgeableEntity || e instanceof GolemEntity);
+        return hostiles;
 
     }
 
     //Gets the closest hostile mob in sight
-    public MonsterEntity getClosestHostileEntity() {
-        List<Entity> hostileEntities = getHostileEntities();
-        MonsterEntity target = null;
+    public MobEntity getClosestHostileEntity() {
+        List<MobEntity> hostileEntities = getHostileEntities();
+        MobEntity target = null;
         double targetDistance = 10000.0;
         double testDistance;
         double[] offset;
@@ -130,7 +134,7 @@ public abstract class TowerBlockEntity extends TileEntity implements ITickableTi
                 offset = getTargetDirection(e);
                 if(checkSightLine(e, offset[0], offset[1], offset[2])) {
                     setTargetDirection(offset[0], offset[1], offset[2]);
-                    target = (MonsterEntity) e;
+                    target = (MobEntity) e;
                     targetDistance = testDistance;
                 }
             }
